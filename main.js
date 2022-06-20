@@ -24,11 +24,85 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 // Add your functions below:
+// the purpose of this function is to return true when an array contains digits
+// of a valid credit card number and false when its invalid.
+const validateCred = arr => {
+    let total = 0;
+    // iterate through the array backward 
+    for (let i = arr.length-1; i >= 0; i--){
+        console.log(arr[i]);   // returns the array backwards 
+        let reversedArr = arr[i];
 
+        // get every other digit to double 
+        if((arr.length - 1 -i) % 2 === 1) {
+            reversedArr *= 2;
+            // if the new value array is greater than 9 subtract 9 from it.
+            if (reversedArr > 9) {
+                reversedArr -= 9
+            }
+        }
+        // sum up all the digits in the credit card number 
+        total += reversedArr;
 
+    }
+    // if the sum modulo 10 is 0 then the number is valid, otherwise is invalid
+    return total % 10 === 0;
+};
 
+console.log(validateCred(valid1)); // returns true
+console.log(validateCred(invalid1)); // returns false 
 
+const findInvalidCards = cards => {
+    // create a new array to keep track of all invalid credit card numbers
+    let invalidCC = [];
 
+    // loop through the nested array and use the validateCred() function to check if the number is valid
+    for (let i = 0; i < cards.length; i++) {
+        let currentCC  = cards[i];
+        if (!validateCred(currentCC)) {
+            invalidCC.push(currentCC);
+        }
+    }
+    // return another nested array of invalid cards
+    return invalidCC;
+}
 
+console.log(findInvalidCards([valid1])); // since is valid it returns nothing
+console.log(findInvalidCards([invalid1, invalid2])); // returns array of invalid card numbers 
 
+const idInvalidCardCompanies = invalidNumArr => {
+    // New arr to store the companies to contact
+    let companiesArr = [];
 
+    // iterate through the array of invalid numbers
+    for (let i = 0; i < invalidNumArr.length; i++) {
+        // switch statement to match the first digit to the company
+        switch (invalidNumArr[i][0]) {
+            case 3:
+                if (companiesArr.indexOf('Amex') === -1) {
+                    companiesArr.push('Amex');
+                }
+                break;
+            case 4:
+                if (companiesArr.indexOf('Visa')) {
+                    companiesArr.push('Visa');
+                }
+                break;
+            case 5:
+                if (companiesArr.indexOf('Mastercard')) {
+                    companiesArr.push('Mastercard');
+                }
+                break;
+            case 6:
+                if (companiesArr.indexOf('Discover')) {
+                    companiesArr.push('Discover')
+                }
+                break;
+            default:
+            console.log('Company not found');
+        }
+    }
+    return companiesArr;
+}
+
+console.log(idInvalidCardCompanies([invalid1])); // Prints credit card company
